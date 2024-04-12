@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'xsec-analyzer'
+copyright = '2024, Steven Gardiner, Burke Irwin, Liang Liu'
+author = 'Liang Liu'
 
 release = '0.1'
 version = '0.1.0'
