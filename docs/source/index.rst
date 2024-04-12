@@ -1,5 +1,5 @@
 Documentation for the MCC9 :math:`{\rm CC}0\pi Np` analysis code
-===================================
+================================================================
 
 The ROOT-based C++ code used to obtain the double-differential measurements
 of :math:`{\rm CC}0\pi Np` events reported in `MCC9 Double-differential CCNp cross sections <https://microboone-docdb.fnal.gov/cgi-bin/sso/ShowDocument?docid=35518>`_ has been made available on
