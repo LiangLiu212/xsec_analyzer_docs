@@ -1,5 +1,5 @@
 Analysis workflow
-===
+=====
 
 The entire :math:`{\rm CC}0\pi Np` analysis is based on the ROOT ntuple files produced by the
 PeLEE team's `searchingfornues <https://github.com/ubneutrinos/searchingfornues>`_ framework. A list of pre-made
