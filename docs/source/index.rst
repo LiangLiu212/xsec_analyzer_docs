@@ -24,4 +24,5 @@ Contents
 .. toctree::
 
    usage
+   workflow
    api
