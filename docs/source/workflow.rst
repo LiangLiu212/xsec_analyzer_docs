@@ -1,5 +1,4 @@
-Analysis workflow
-
+Analysis Workflow
 =====
 
 The entire :math:`{\rm CC}0\pi Np` analysis is based on the ROOT ntuple files produced by the
