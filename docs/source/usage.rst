@@ -6,29 +6,19 @@ Usage
 Installation
 ------------
 
-To use Lumache, first install it using pip:
+The `xsec-analyzer <https://github.com/LiangLiu212/xsec_analyzer/tree/docs>`_ repository contains a set of Bash scripts, ROOT macros, and \cpp\ source files intended for interactive use on the MicroBooNE gpvm nodes. To install the code, navigate to a writeable area in your
 
 .. code-block:: console
 
-   (.venv) $ pip install lumache
+   $ git clone git@github.com:LiangLiu212/xsec_analyzer.git NAME
+   
 
-Creating recipes
-----------------
+where ``NAME`` should be replaced with the desired name of the folder that
+will hold the clone of the main Git repository. Once the cloning process is complete, you may set up the runtime environment (ROOT, etc.) by executing
 
-To retrieve a list of random ingredients,
-you can use the ``lumache.get_random_ingredients()`` function:
+.. code-block:: console
+   $ cd NAME
+   $ source setup_stv.sh
 
-.. autofunction:: lumache.get_random_ingredients
-
-The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-or ``"veggies"``. Otherwise, :py:func:`lumache.get_random_ingredients`
-will raise an exception.
-
-.. autoexception:: lumache.InvalidKindError
-
-For example:
-
->>> import lumache
->>> lumache.get_random_ingredients()
-['shells', 'gorgonzola', 'parsley']
-
+Sourcing the ``setup_stv.sh`` Bash script is all that is necessary to
+initialize the runtime environment again during a fresh login.
