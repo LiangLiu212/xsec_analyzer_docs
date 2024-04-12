@@ -17,6 +17,7 @@ where ``NAME`` should be replaced with the desired name of the folder that
 will hold the clone of the main Git repository. Once the cloning process is complete, you may set up the runtime environment (ROOT, etc.) by executing
 
 .. code-block:: console
+
    $ cd NAME
    $ source setup_stv.sh
 
