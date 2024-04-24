@@ -1,9 +1,6 @@
-Template for the Read the Docs tutorial
-=======================================
-
-This GitHub template includes fictional Python library
-with some basic Sphinx docs.
+Documentation for the MCC9 analysis code
+========================================
 
 Read the tutorial here:
 
-https://docs.readthedocs.io/en/stable/tutorial/
+https://xsec-analyzer-docs.readthedocs.io/en/latest/
