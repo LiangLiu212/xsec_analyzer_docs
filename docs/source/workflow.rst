@@ -13,8 +13,10 @@ Assuming that the user has all needed PeLEE ntuple files already processed, the
 major steps for performing a measurement are outlined in the following
 subsections.
 
-Ntuple post-processing
-----------------------
+.. toctree::
+    
+   ntuple
+
 
 
 
