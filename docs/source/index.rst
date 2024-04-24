@@ -25,4 +25,5 @@ Contents
 
    usage
    workflow
+   ntuple
    api
