@@ -39,24 +39,23 @@ Ntuple files from PeLEE include two ``TTree``: ``nuselection/NeutrinoSelectionFi
 ============================ ============================== ======= ===========
 Branch			     AnalysisEvent		    Type    Description
 ============================ ============================== ======= ===========
-slpdg                        ev.nu_pdg_                     INT     adsas
-nslice                       ev.nslice_                     INT     
-topological_score            ev.topological_score_          INT
-CosmicIP                     ev.cosmic_impact_parameter_    INT
-CosmicIPAll3D                ev.CosmicIPAll3D_              INT
-reco_nu_vtx_sce_x            ev.nu_vx_                      INT
-reco_nu_vtx_sce_y            ev.nu_vy_                      INT
-reco_nu_vtx_sce_z            ev.nu_vz_                      INT
-n_pfps                       ev.num_pf_particles_           INT
-n_tracks                     ev.num_tracks_                 INT
-n_showers                    ev.num_showers_                INT
-nu_pdg                       ev.mc_nu_pdg_                  INT
-true_nu_vtx_x                ev.mc_nu_vx_                   INT
-true_nu_vtx_y                ev.mc_nu_vy_                   INT
-true_nu_vtx_z                ev.mc_nu_vz_                   INT
-nu_e                         ev.mc_nu_energy_               INT
-ccnc                         ev.mc_nu_ccnc_                 INT
-interaction                  ev.mc_nu_interaction_type_     INT
+slpdg                        ev.nu_pdg_                     INT     Reco PDG code of primary PFParticle in slice (i.e., the neutrino candidate)
+nslice                       ev.nslice_                     INT     Number of neutrino slices identified by the SliceID. Allowed values are zero or one.
+topological_score            ev.topological_score_          INT     A topological score which assesses to what extent the slice looks like a neutrino interaction in the TPC 
+CosmicIP                     ev.cosmic_impact_parameter_    INT     3D distance of shower start from closest spacepoint of primary muon (i.e. cosmic)
+reco_nu_vtx_sce_x            ev.nu_vx_                      INT     x component of reconstructed neutrino vertex position (with corrections for space charge applied)
+reco_nu_vtx_sce_y            ev.nu_vy_                      INT     y component of reconstructed neutrino vertex position (with corrections for space charge applied)
+reco_nu_vtx_sce_z            ev.nu_vz_                      INT     z component of reconstructed neutrino vertex position (with corrections for space charge applied)
+n_pfps                       ev.num_pf_particles_           INT     Number of pandora final particles
+n_tracks                     ev.num_tracks_                 INT     Number of tracks in pandora final particles
+n_showers                    ev.num_showers_                INT     Number of showers in pandora final particles
+nu_pdg                       ev.mc_nu_pdg_                  INT     PDG id of nu (MC truth)
+true_nu_vtx_x                ev.mc_nu_vx_                   INT     x component of truth neutrino vertex coordinates
+true_nu_vtx_y                ev.mc_nu_vy_                   INT     y component of truth neutrino vertex coordinates
+true_nu_vtx_z                ev.mc_nu_vz_                   INT     z component of truth neutrino vertex coordinates
+nu_e                         ev.mc_nu_energy_               INT     Truth neutrino energy
+ccnc                         ev.mc_nu_ccnc_                 int     Whether the event is CC (0) or NC (1)     
+interaction                  ev.mc_nu_interaction_type_     INT     Interaction code from GENIE
 true_nu_vtx_sce_x            ev.mc_nu_sce_vx_               INT
 true_nu_vtx_sce_y            ev.mc_nu_sce_vy_               INT
 true_nu_vtx_sce_z            ev.mc_nu_sce_vz_               INT
@@ -131,3 +130,34 @@ Selection
 ~~~~~~~~~
 
 
+
+
+
+* Interaction codes and the corresponding processes
+
+==== =================================
+Code Process
+==== =================================
+0    NULL
+1    QES (QuasiElastic)      
+2    1Kaon (Single Kaon)    
+3    DIS (Deep Inelastic)      
+4    RES (Resonant)      
+5    COH (Coherent Production)
+6    DFR (Diffractive)      
+7    NuEEL (Nu Electron Elastic)    
+8    IMD (Inverse Mu Decay)     
+9    AMNuGamma 
+10   MEC (Meson Exchange)
+11   CEvNS (Coherent Elastic)
+12   IBD (Inverse Beta Decay)
+13   GLR (Glashow Resonance)
+14   IMDAnh (IMD Annihilation)
+15   PhotonCOH (Photon Coherent)
+16   PhotonRES (Photon Resonance)
+101  DMEL (Dark Matter Elastic)
+102  DMDIS (Dark Matter Deep Inelastic)
+103  DME (Dark Matter Electron)
+104  Norm      
+-100 Uknown to GENIE
+==== =================================
