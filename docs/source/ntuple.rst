@@ -56,61 +56,61 @@ true_nu_vtx_z                ev.mc_nu_vz_                   INT     z component 
 nu_e                         ev.mc_nu_energy_               INT     Truth neutrino energy
 ccnc                         ev.mc_nu_ccnc_                 int     Whether the event is CC (0) or NC (1)     
 interaction                  ev.mc_nu_interaction_type_     INT     Interaction code from GENIE
-true_nu_vtx_sce_x            ev.mc_nu_sce_vx_               INT
-true_nu_vtx_sce_y            ev.mc_nu_sce_vy_               INT
-true_nu_vtx_sce_z            ev.mc_nu_sce_vz_               INT
-weightSpline                 ev.spline_weight_              INT
-weightTune                   ev.tuned_cv_weight_            INT
-nu_completeness_from_pfp     ev.nu_completeness_from_pfp_   INT
-nu_purity_from_pfp           ev.nu_purity_from_pfp_         INT
-pfp_generation_v             ev.pfp_generation_             INT
-pfp_trk_daughters_v          ev.pfp_trk_daughters_count_    INT
-pfp_shr_daughters_v          ev.pfp_shr_daughters_count_    INT
-trk_score_v                  ev.pfp_track_score_            INT
-pfpdg                        ev.pfp_reco_pdg_               INT
-pfnhits                      ev.pfp_hits_                   INT
-pfnplanehits_U               ev.pfp_hitsU_                  INT
-pfnplanehits_V               ev.pfp_hitsV_                  INT
-pfnplanehits_Y               ev.pfp_hitsY_                  INT
-backtracked_pdg              ev.pfp_true_pdg_               INT
-backtracked_e                ev.pfp_true_E_                 INT
-backtracked_px               ev.pfp_true_px_                INT
-backtracked_py               ev.pfp_true_py_                INT
-backtracked_pz               ev.pfp_true_pz_                INT
-shr_pfp_id_v                 ev.shower_pfp_id_              INT
-shr_start_x_v                ev.shower_startx_              INT
-shr_start_y_v                ev.shower_starty_              INT
-shr_start_z_v                ev.shower_startz_              INT
-shr_dist_v                   ev.shower_start_distance_      INT
-trk_pfp_id_v                 ev.track_pfp_id_               INT
-trk_len_v                    ev.track_length_               INT
-trk_sce_start_x_v            ev.track_startx_               INT
-trk_sce_start_y_v            ev.track_starty_               INT
-trk_sce_start_z_v            ev.track_startz_               INT
-trk_distance_v               ev.track_start_distance_       INT
-trk_sce_end_x_v              ev.track_endx_                 INT
-trk_sce_end_y_v              ev.track_endy_                 INT
-trk_sce_end_z_v              ev.track_endz_                 INT
-trk_dir_x_v                  ev.track_dirx_                 INT
-trk_dir_y_v                  ev.track_diry_                 INT
-trk_dir_z_v                  ev.track_dirz_                 INT
-trk_theta_v                  ev.track_theta_                INT
-trk_phi_v                    ev.track_phi_                  INT
-trk_energy_proton_v          ev.track_kinetic_energy_p_     INT
-trk_range_muon_mom_v         ev.track_range_mom_mu_         INT
-trk_mcs_muon_mom_v           ev.track_mcs_mom_mu_           INT
-trk_pid_chipr_v              ev.track_chi2_proton_          INT
-trk_llr_pid_v                ev.track_llr_pid_              INT
-trk_llr_pid_u_v              ev.track_llr_pid_U_            INT
-trk_llr_pid_v_v              ev.track_llr_pid_V_            INT
-trk_llr_pid_y_v              ev.track_llr_pid_Y_            INT
-trk_llr_pid_score_v          ev.track_llr_pid_score_        INT
-mc_pdg                       ev.mc_nu_daughter_pdg_         INT
-mc_E                         ev.mc_nu_daughter_energy_      INT
-mc_px                        ev.mc_nu_daughter_px_          INT
-mc_py                        ev.mc_nu_daughter_py_          INT
-mc_pz                        ev.mc_nu_daughter_pz_          INT
-weights                      ev.mc_weights_map_             INT
+true_nu_vtx_sce_x            ev.mc_nu_sce_vx_               INT     x component of truth neutrino vertex position (with corrections for space charge applied)
+true_nu_vtx_sce_y            ev.mc_nu_sce_vy_               INT     y component of truth neutrino vertex position (with corrections for space charge applied)
+true_nu_vtx_sce_z            ev.mc_nu_sce_vz_               INT     z component of truth neutrino vertex position (with corrections for space charge applied)
+weightSpline                 ev.spline_weight_              INT     GENIE weights
+weightTune                   ev.tuned_cv_weight_            INT     GENIE weights
+nu_completeness_from_pfp     ev.nu_completeness_from_pfp_   INT     Completeness of the backtracked hits in the neutrino slice
+nu_purity_from_pfp           ev.nu_purity_from_pfp_         INT     Purity of the backtracked hits in the neutrino slice
+pfp_generation_v             ev.pfp_generation_             INT     generation, 1 is primary
+pfp_trk_daughters_v          ev.pfp_trk_daughters_count_    INT     number of track daughters
+pfp_shr_daughters_v          ev.pfp_shr_daughters_count_    INT     number of shower daughters
+trk_score_v                  ev.pfp_track_score_            INT     
+pfpdg                        ev.pfp_reco_pdg_               INT     PDG code of pfp in slice
+pfnhits                      ev.pfp_hits_                   INT     number of hits in pfp
+pfnplanehits_U               ev.pfp_hitsU_                  INT     number of hits in pfp plane U
+pfnplanehits_V               ev.pfp_hitsV_                  INT     number of hits in pfp plane V
+pfnplanehits_Y               ev.pfp_hitsY_                  INT     number of hits in pfp plane Y
+backtracked_pdg              ev.pfp_true_pdg_               INT     PDG code of backtracked particle
+backtracked_e                ev.pfp_true_E_                 INT     energy of backtracked particle
+backtracked_px               ev.pfp_true_px_                INT     px of backtracked particle
+backtracked_py               ev.pfp_true_py_                INT     py of backtracked particle
+backtracked_pz               ev.pfp_true_pz_                INT     pz of backtracked particle
+shr_pfp_id_v                 ev.shower_pfp_id_              INT     Shower properties
+shr_start_x_v                ev.shower_startx_              INT     Shower properties
+shr_start_y_v                ev.shower_starty_              INT     Shower properties
+shr_start_z_v                ev.shower_startz_              INT     Shower properties
+shr_dist_v                   ev.shower_start_distance_      INT     Shower properties
+trk_pfp_id_v                 ev.track_pfp_id_               INT     Track properties
+trk_len_v                    ev.track_length_               INT     Track properties
+trk_sce_start_x_v            ev.track_startx_               INT     Track properties
+trk_sce_start_y_v            ev.track_starty_               INT     Track properties
+trk_sce_start_z_v            ev.track_startz_               INT     Track properties
+trk_distance_v               ev.track_start_distance_       INT     Track properties
+trk_sce_end_x_v              ev.track_endx_                 INT     Track properties
+trk_sce_end_y_v              ev.track_endy_                 INT     Track properties
+trk_sce_end_z_v              ev.track_endz_                 INT     Track properties
+trk_dir_x_v                  ev.track_dirx_                 INT     Track properties
+trk_dir_y_v                  ev.track_diry_                 INT     Track properties 
+trk_dir_z_v                  ev.track_dirz_                 INT     Track properties
+trk_theta_v                  ev.track_theta_                INT     Track properties
+trk_phi_v                    ev.track_phi_                  INT     Track properties
+trk_energy_proton_v          ev.track_kinetic_energy_p_     INT     Track properties
+trk_range_muon_mom_v         ev.track_range_mom_mu_         INT     Track properties
+trk_mcs_muon_mom_v           ev.track_mcs_mom_mu_           INT     Track properties
+trk_pid_chipr_v              ev.track_chi2_proton_          INT     Track properties
+trk_llr_pid_v                ev.track_llr_pid_              INT     Track properties
+trk_llr_pid_u_v              ev.track_llr_pid_U_            INT     Track properties
+trk_llr_pid_v_v              ev.track_llr_pid_V_            INT     Track properties
+trk_llr_pid_y_v              ev.track_llr_pid_Y_            INT     Track properties
+trk_llr_pid_score_v          ev.track_llr_pid_score_        INT     Track properties
+mc_pdg                       ev.mc_nu_daughter_pdg_         INT     MC truth information for the final-state primary particles
+mc_E                         ev.mc_nu_daughter_energy_      INT     MC truth information for the final-state primary particles
+mc_px                        ev.mc_nu_daughter_px_          INT     MC truth information for the final-state primary particles
+mc_py                        ev.mc_nu_daughter_py_          INT     MC truth information for the final-state primary particles
+mc_pz                        ev.mc_nu_daughter_pz_          INT     MC truth information for the final-state primary particles
+weights                      ev.mc_weights_map_             INT     General systematic weights
 ============================ ============================== ======= ===========
 
 
