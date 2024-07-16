@@ -36,4 +36,26 @@ for major analysis tools:
 3. `Slice_Plots`
 4. `Unfolder`
 
+You can find five shell scripts in 
 
+.. code-block:: console
+    
+    	$ ls Scripts/*
+	Scripts/FullAnalysis.sh  Scripts/ReprocessNTuples.sh  Scripts/UniverseMaker.sh
+	Scripts/PlotSlices.sh    Scripts/Unfolder.sh
+
+Firstly, you need to reprocess ntuples:
+
+.. code-block:: console
+	$ ./Scripts/ReprocessNTuples.sh OUTPUT_DIRECTORY NTUPLE_LIST_FILE
+
+``NTUPLE_LIST_FILE`` is a plain text which collects ntuple files from `PeLEE <https://github.com/ubneutrinos/searchingfornues>`. 
+The location of ntuples can be found in `spreadsheet <https://docs.google.com/spreadsheets/d/1dX-W4DGTHeZbJLt2HvwXS4QDNeEwYKveHHSCkVrJcSU/edit?gid=0#gid=0>`, as well as their Trigger counts, POT exposures and scaling factor. 
+``OUTPUT_DIRECTORY`` is the directory of the outputs. 
+
+Secondly, you can make universes by:
+
+.. code-block:: console
+	$ ./Scripts/UniverseMaker.sh FPM_CONFIG SEL_CONFIG OUTPUTFILE
+
+``FPM_CONFIG`` includes the output from the last step. 
