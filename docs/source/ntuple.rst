@@ -1,22 +1,78 @@
 Ntuple post-processing
 ----------------------
 
-``ProcessNTuples`` in ``$STV_ANALYSIS_DIR/NTupleProcessing`` converts the ROOT ntuple 
+What does ``ProcessNTuples`` do?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``ProcessNTuples`` converts the ROOT ntuple
 files produced by PeLEE team's `searchingfornues <https://github.com/ubneutrinos/searchingfornues>`_ framework
-into a new, post-processed ntuple file. The workflow of ``ProcessNTuples`` includes three steps
+into a new, post-processed ntuple file.
 
-- Read ntuples from files produced by PeLEE team's
-- Select, classify (for MC) and compute new observables for each event
-- Save the survived events into a new ROOT file.
+- Define signal and background
+- Apply selection criteria (using a bool to label the survived events instead of applying a filter)
+- Compute true observables
+- Compute reconstruction observables
+- Categorize event
 
-``TChain`` is used to manipulate multiple files.
+1. SelectionBase
+
+    `SelectionBase <https://github.com/uboone/xsec_analyzer/blob/main/include/XSecAnalyzer/Selections/SelectionBase.hh>`_ is the base class of all selection classes in analyzer framework. It
+    provides the common interface for operations such as setup input branches, define signal, selection, define output branches ...
+
+    .. code-block:: cpp
+
+          virtual bool selection( AnalysisEvent* event ) = 0;
+          virtual int categorize_event( AnalysisEvent* event ) = 0;
+          virtual void compute_reco_observables( AnalysisEvent* event ) = 0;
+          virtual void compute_true_observables( AnalysisEvent* event ) = 0;
+          virtual void define_output_branches() = 0;
+          virtual bool define_signal( AnalysisEvent* event ) = 0;
+          virtual void define_constants() = 0;
+          virtual void define_category_map() = 0;
+          virtual void reset() = 0;
+          virtual void define_additional_input_branches(TTree& etree) = 0;
+
+
+2. SelectionFactory
+
+    `SelectionFactory <https://github.com/uboone/xsec_analyzer/blob/main/include/XSecAnalyzer/Selections/SelectionFactory.hh>`_
+    implements a factory design pattern to dynamically create objects of different selection classes
+    (CC1mu1p0pi, CC1mu2p0pi, etc.) based on a string input. It provides a centralized way to manage the creation of
+    these objects while ensuring that unsupported requests are handled with an error message and exception.
+
+    Users need to put their own selection classes into ``SelectionFactory::CreateSelection``
+
+    .. code-block:: cpp
+
+        SelectionBase* SelectionFactory::CreateSelection(
+          const std::string& selection_name )
+        {
+          SelectionBase* sel;
+          if ( selection_name == "CC1mu1p0pi" ) {
+            sel = new CC1mu1p0pi;
+          }
+          else if ( selection_name == "CC1mu2p0pi" ) {
+            sel = new CC1mu2p0pi;
+          }
+          else if ( selection_name == "CC1muNp0pi" ) {
+            sel = new CC1muNp0pi;
+          }
+          else if ( selection_name == "Dummy" ) {
+            sel = new DummySelection;
+          }
+          else {
+            std::cerr << "Selection name requested: " << selection_name
+              << " is not implemented in " << __FILE__ << '\n';
+            throw;
+          }
 
 Input ntuples
 ~~~~~~~~~~~~~
 
 Ntuple files from PeLEE include two ``TTree``: ``nuselection/NeutrinoSelectionFilter`` and ``nuselection/SubRun``. 
 
-1. ``nuselection/NeutrinoSelectionFilter`` contains more than 700 branchs for each event. These branchs include the information of reconstructed showers, tracks, cosmic rays, such as the MC truth, particle identification, reconstructed four momentum, position of vertex, etc. ``Branches.h`` in ``$STV_ANALYSIS_DIR/Utils/Includes`` provide helper function to read the information from the event TTree. The object ``AnalysisEvent`` will hold the information for the procedures in next step. Here is a slice from ``$STV_ANALYSIS_DIR/Utils/Includes/Branches.h``. Users can modify this file to read branchs for their specific purposes.
+1. ``nuselection/NeutrinoSelectionFilter`` contains more than 700 branchs for each event. These branchs include the information of reconstructed showers, tracks, cosmic rays, such as the MC truth, particle identification, reconstructed four momentum, position of vertex, etc.
+   `Branches.hh <https://github.com/uboone/xsec_analyzer/blob/main/include/XSecAnalyzer/Branches.hh>`_ provide helper function to read the information from the event TTree. The object `AnalysisEvent <https://github.com/uboone/xsec_analyzer/blob/main/include/XSecAnalyzer/AnalysisEvent.hh>`_ will hold the information for the procedures in next step.
 
 .. code-block:: cpp
 
@@ -41,19 +97,19 @@ Branch			     AnalysisEvent		    Type    Description
 ============================ ============================== ======= ===========
 slpdg                        ev.nu_pdg_                     INT     Reco PDG code of primary PFParticle in slice (i.e., the neutrino candidate)
 nslice                       ev.nslice_                     INT     Number of neutrino slices identified by the SliceID. Allowed values are zero or one.
-topological_score            ev.topological_score_          INT     A topological score which assesses to what extent the slice looks like a neutrino interaction in the TPC 
-CosmicIP                     ev.cosmic_impact_parameter_    INT     3D distance of shower start from closest spacepoint of primary muon (i.e. cosmic)
-reco_nu_vtx_sce_x            ev.nu_vx_                      INT     x component of reconstructed neutrino vertex position (with corrections for space charge applied)
-reco_nu_vtx_sce_y            ev.nu_vy_                      INT     y component of reconstructed neutrino vertex position (with corrections for space charge applied)
-reco_nu_vtx_sce_z            ev.nu_vz_                      INT     z component of reconstructed neutrino vertex position (with corrections for space charge applied)
+topological_score            ev.topological_score_          FLOAT     A topological score which assesses to what extent the slice looks like a neutrino interaction in the TPC
+CosmicIP                     ev.cosmic_impact_parameter_    FLOAT     3D distance of shower start from closest spacepoint of primary muon (i.e. cosmic)
+reco_nu_vtx_sce_x            ev.nu_vx_                      FLOAT     x component of reconstructed neutrino vertex position (with corrections for space charge applied)
+reco_nu_vtx_sce_y            ev.nu_vy_                      FLOAT     y component of reconstructed neutrino vertex position (with corrections for space charge applied)
+reco_nu_vtx_sce_z            ev.nu_vz_                      FLOAT     z component of reconstructed neutrino vertex position (with corrections for space charge applied)
 n_pfps                       ev.num_pf_particles_           INT     Number of pandora final particles
 n_tracks                     ev.num_tracks_                 INT     Number of tracks in pandora final particles
 n_showers                    ev.num_showers_                INT     Number of showers in pandora final particles
 nu_pdg                       ev.mc_nu_pdg_                  INT     PDG id of nu (MC truth)
-true_nu_vtx_x                ev.mc_nu_vx_                   INT     x component of truth neutrino vertex coordinates
-true_nu_vtx_y                ev.mc_nu_vy_                   INT     y component of truth neutrino vertex coordinates
-true_nu_vtx_z                ev.mc_nu_vz_                   INT     z component of truth neutrino vertex coordinates
-nu_e                         ev.mc_nu_energy_               INT     Truth neutrino energy
+true_nu_vtx_x                ev.mc_nu_vx_                   FLOAT     x component of truth neutrino vertex coordinates
+true_nu_vtx_y                ev.mc_nu_vy_                   FLOAT     y component of truth neutrino vertex coordinates
+true_nu_vtx_z                ev.mc_nu_vz_                   FLOAT     z component of truth neutrino vertex coordinates
+nu_e                         ev.mc_nu_energy_               FLOAT     Truth neutrino energy
 ccnc                         ev.mc_nu_ccnc_                 int     Whether the event is CC (0) or NC (1)     
 interaction                  ev.mc_nu_interaction_type_     INT     Interaction code from GENIE
 true_nu_vtx_sce_x            ev.mc_nu_sce_vx_               INT     x component of truth neutrino vertex position (with corrections for space charge applied)
@@ -131,9 +187,23 @@ Selection
 
 
 
+- Event Category
 
+    Enum used to label event categories of interest for analysis plots in analyses.
+    The enum is defined in header, e.g. `EventCategoriesXp.hh <https://github.com/uboone/xsec_analyzer/blob/main/include/XSecAnalyzer/Selections/EventCategoriesXp.hh>`_
+    A map that associates specific event categories with a descriptive label and a color code for visualization purposes is defined
+    in `EventCategoriesXp.cxx <https://github.com/uboone/xsec_analyzer/blob/main/src/selections/EventCategoriesXp.cxx>`_
 
-* Interaction codes and the corresponding processes
+    To use your event category
+
+    .. code-block:: cpp
+
+        void CC1muNp0pi::define_category_map() {
+          // Use the shared category map for 1p/2p/Np/Xp
+          categ_map_ = CC1muXp_MAP;
+        }
+
+    * Interaction codes and the corresponding processes
 
 ==== =================================
 Code Process
@@ -161,3 +231,8 @@ Code Process
 104  Norm      
 -100 Uknown to GENIE
 ==== =================================
+
+
+- MircoBooNE tune
+
+    ``ev.spline_weight_`` and ``ev.tuned_cv_weight_`` are
