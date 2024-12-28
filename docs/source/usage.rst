@@ -176,6 +176,7 @@ Here, I use ``CC1muXp0pi`` channel as an example to show the workflow of xsec-an
 - STEP 5. ``Unfolder``
 
     Subtract backgrounds, correct for inefficiency and bin-to-bin-smearing, convert to cross-section units
+
     .. code-block:: console
 
         # Usage:
