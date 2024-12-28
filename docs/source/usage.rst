@@ -1,4 +1,4 @@
-Quick Start
+Liang's analysis note
 ===========
 
 .. _installation:
@@ -31,7 +31,7 @@ add ``${XSEC_ANALYZER_DIR}/lib`` into the environment variable ``LD_LIBRARY_PATH
 On a fresh login, just navigate to the same folder and source the ``setup_xsec_analyzer.sh`` script.
 
 
-How to run
+Workflow
 ----------
 
 The `xsec-analyzer <https://github.com/LiangLiu212/xsec_analyzer/tree/docs>`_ provides 
@@ -42,13 +42,45 @@ six major analysis tools. They are executables in ``${XSEC_ANALYZER_DIR}/bin``:
     $ ls ${XSEC_ANALYZER_DIR}/bin
     BinScheme  ProcessNTuples   SlicePlots  StandaloneUnfold  Unfolder  univmake
 
-Here, I use ``CC1mu1p0pi`` channel as an example to show the workflow of xsec-analyzer.
+Here, I use ``CC1muXp0pi`` channel as an example to show the workflow of xsec-analyzer.
 
 - STEP 1. ``ProcessNTuples``
+
+    The basic usage of ``ProcessNtuples``
 
     .. code-block:: console
 
         $ ProcessNTuples INPUT_PELEE_NTUPLE_FILE CC1mu1p0pi OUTPUT_FILE
+
+    Here, I use a script to handle the all the different type of ntuples for different runs.
+
+    .. code-block:: console
+
+        $ ./ReprocessNTuples.sh -h
+            Usage: ./ReprocessNTuples.sh [-o <out directory>] [-v version] [-r runnumbers] [-s samples]
+              -c configure   A text file includes all the PeLEE samples.
+              -s selection   Name of your selection algorithm.
+              -o directory   Specify the output directory. It should be in your data area e.g. /exp/uboone/data/users/liangliu
+              -r run #       Specify runs to process (comma-separated, e.g., 1,2,3).
+              -v version     Specify the version in teck note (e.g. v00_00_01)
+              -t type        Specify the type of ntuples (e.g., numuMC,nueMC,dirtMC,extBNB,onBNB,openBNB,detVarCV ... )
+              -h help        Print help info
+        # Post-process the nu overlay of run 1
+        $ ./ReprocessNTuples.sh -s CC1muXp0pi -r 1 -t numuMC
+            numuMC,File Name: /exp/uboone/data/users/liangliu/hadd/run1/run1_bnb_nu_overlay_generator_resc_ntuple_ntuple_ana.root
+            Index: 1
+            Sample Type: numuMC
+            Number of Events:
+            Scaling Factor:
+            Output file name: /exp/uboone/data/users/liangliu/xsec/xsec_CC1muXp0pi_v00_00_01_run1_bnb_nu_overlay_generator_resc_ntuple_ntuple_ana.root
+            time ProcessNTuples /exp/uboone/data/users/liangliu/hadd/run1/run1_bnb_nu_overlay_generator_resc_ntuple_ntuple_ana.root CC1muXp0pi /exp/uboone/data/users/liangliu/xsec/xsec_CC1muXp0pi_v00_00_01_run1_bnb_nu_overlay_generator_resc_ntuple_ntuple_ana.root
+            --------------------------------
+        #  Post-process all the ntuples
+        $ ./ReprocessNTuples.sh
+
+    The configuration file which collects all the PeLEE ntuples for my ``CC1muXp0pi`` analysis
+    is ``${XSEC_ANALYZER_DIR}/configs/files_to_process_liangliu.txt``
+
 
     - ``INPUT_PELEE_NTUPLE_FILE`` should be a PeLEE ntuples, e.g. `PeLEE Samples 2023 <https://docs.google.com/spreadsheets/d/1dX-W4DGTHeZbJLt2HvwXS4QDNeEwYKveHHSCkVrJcSU/edit?gid=0#gid=0>`_
 
@@ -69,29 +101,108 @@ Here, I use ``CC1mu1p0pi`` channel as an example to show the workflow of xsec-an
 
 - STEP 2. ``BinScheme``
 
+    Plot the smearing matrix
+
+    .. code-block:: console
+
+        $ BinScheme -c TutorialBinScheme
+
+    Save binning configuration into text files
+
+    .. code-block:: console
+
+        $ BinScheme -s TutorialBinScheme
+
+           ------------------------------------------------------------------
+          | Welcome to ROOT 6.28/12                        https://root.cern |
+          | (c) 1995-2024, The ROOT Team; conception: R. Brun, F. Rademakers |
+          | Built for linuxx8664gcc on Jan 30 2024, 08:17:35                 |
+          | From tags/v6-28-12@v6-28-12                                      |
+          | With g++ (Spack GCC) 12.2.0                                      |
+          | Try '.help'/'.?', '.demo', '.license', '.credits', '.quit'/'.q'  |
+           ------------------------------------------------------------------
+
+        non-option ARGV-elements: CCXp0piBinScheme
+        muon_2d_bin
+        stv_tree
+        CC1muXp0pi
+        174
+        0 0 "CC1muXp0pi_MC_Signal && CC1muXp0pi_sig_mc_num_proton_in_momentum_range >= 0.000 && CC1muXp0pi_sig_mc_num_proton_in_momentum_range < 1.000"
+        0 0 "CC1muXp0pi_MC_Signal && CC1muXp0pi_sig_mc_num_proton_in_momentum_range >= 1.000 && CC1muXp0pi_sig_mc_num_proton_in_momentum_range < 2.000"
+        0 0 "CC1muXp0pi_MC_Signal && CC1muXp0pi_sig_mc_num_proton_in_momentum_range >= 2.000 && CC1muXp0pi_sig_mc_num_proton_in_momentum_range < 3.000"
+        0 0 "CC1muXp0pi_MC_Signal && CC1muXp0pi_sig_mc_num_proton_in_momentum_range >= 3.000 && CC1muXp0pi_sig_mc_num_proton_in_momentum_range < 10.000"
+        ......
+        163 1 164
+        164 1 165
+        165 1 166
+        166 1 167
+        Save universes bin configuration into => /exp/uboone/app/users/liangliu/analysis-code/tutorial/xsec_analyzer_eaf/configs/ccxp0pi_TKI_2D_bin_config.txt
+        Save slice configuration into         => /exp/uboone/app/users/liangliu/analysis-code/tutorial/xsec_analyzer_eaf/configs/ccxp0pi_TKI_2D_slice_config.txt
+        root [0]
 
 
+- STEP 3. ``univmake``
 
-3. `univmake`
-4. `Slice_Plots`
-5. `Unfolder`
-6. `StandaloneUnfold`
+    Using the output from step 1 and 2 to run univmake
+
+    .. code-block:: console
+
+        # Usage:
+        #  univmake LIST_FILE UNIVMAKE_CONFIG_FILE OUTPUT_ROOT_FILE
+        $ univmake  $XSEC_ANALYZER_DIR/configs/file_properties_CC1muXp0pi_v00_00_01.txt $XSEC_ANALYZER_DIR/configs/ccxp0pi_TKI_2D_bin_config.txt /exp/uboone/data/users/liangliu/ntuple/
+
+- STEP 4.  ``SlicePlots``
+
+    Once the unimake finished, we can plot the distributions that we configured in Bin Scheme.
+
+    .. code-block:: console
+
+        # Usage:
+        # SlicePlots FILE_PROPERTIES SYS_CALC_CONF SLICE_CONF UNIV_FILE SLICE_OUTPUT_DIR
+        $ SlicePlots ${XSEC_ANALYZER_DIR}/configs/file_properties_fsi_current_run3.txt ${XSEC_ANALYZER_DIR}/configs/systcalc.conf ${XSEC_ANALYZER_DIR}/configs/ccxp0pi_TKI_2D_slice_config.txt /exp/uboone/data/users/liangliu/workarea/fsi/univmake_tki_2d/univmake_tki_2d.root `pwd`/output
+
+    .. note::
+        ``FILE_PROPERTIES`` is similar to ``LIST_FILE`` but they are different. ``LIST_FILE`` is just
+        tell the analyzer framework the available samples and make universe for each of them. In
+        ``FILE_PROPERTIES``, you need to configure the universe, to be precise, the universe of detvars
+        to plot the distributions.
+
+        - run 3, 4 and 5 have 9 different detvars
+        - run 2 have no detvar ntuples, we use run 1 and run3 to estimate run 2 detvars
+        - run 1 doesn't need LY Attenuation
+        - MC generated for Run 4a with a special flux that models the misalignment of the beam -- so it's important to use the specific MC for that period weighted to the Run 4a POT (from Patrick)
 
 
-Firstly, you need to reprocess ntuples:
+- STEP 5. ``Unfolder``
 
-.. code-block:: console
+    Subtract backgrounds, correct for inefficiency and bin-to-bin-smearing, convert to cross-section units
+    .. code-block:: console
 
-	$ ./Scripts/ReprocessNTuples.sh OUTPUT_DIRECTORY NTUPLE_LIST_FILE
+        # Usage:
+        #   Unfolder XSEC_CONF SLICE_CONF XSEC_OUTPUT_ROOT_FILE
+        $ Unfolder xsec_config_fakedata_dagostini.txt ${XSEC_ANALYZER_DIR}/configs/ccxp0pi_TKI_2D_slice_config.txt xsec_muon_proton_fakedata_dagostini.root
 
-``NTUPLE_LIST_FILE`` is a plain text which collects ntuple files from `PeLEE <https://github.com/ubneutrinos/searchingfornues>`_. 
-The location of ntuples can be found in `spreadsheet <https://docs.google.com/spreadsheets/d/1dX-W4DGTHeZbJLt2HvwXS4QDNeEwYKveHHSCkVrJcSU/edit?gid=0#gid=0>`_, as well as their Trigger counts, POT exposures and scaling factor. 
-``OUTPUT_DIRECTORY`` is the directory of the outputs. 
+    .. code-block:: console
 
-Secondly, you can make universes by:
+        UnivFile /exp/uboone/data/users/liangliu/workarea/fsi/univmake_tki_2d/univmake_tki_2d.root
+        SystFile /exp/uboone/app/users/liangliu/analysis-code/tutorial/xsec_analyzer_eaf/configs/systcalc.conf
+        FPFile /exp/uboone/app/users/liangliu/analysis-code/tutorial/xsec_analyzer_eaf/configs/file_properties_fsi_current_run12345_fakedata.txt
+        Unfold DAgostini fm 0.025
+        #Unfold WienerSVD 1 second-deriv
+        Prediction uBTune "MicroBooNE Tune" univ CV
+        Prediction FakeData "Fake data" univ FakeData
+        #Prediction gv2 "GENIE 2.12.10" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/comp-all/comp-gv2.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
+        #Prediction gv3 "GENIE 3.0.6" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/comp-all/comp-gv3.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
+        #Prediction g1802a "GENIE 3.2.0 G18_02a" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/comp-all/comp-gv3-g1802a.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
+        #Prediction g2111a "GENIE 3.2.0 G21_11a" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/comp-all/comp-gv3-g2111a.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
+        #Prediction g2111b "GENIE 3.2.0 G21_11b" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/comp-all/comp-gv3-g2111b.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
+        #Prediction neut "NEUT 5.4.0.1" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/comp-all/comp-neut.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
+        #Prediction nuwro "NuWro 19.02.1" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/comp-all/comp-nuwro.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
+        #Prediction gibuu "GiBUU 2021.1" file /exp/uboone/app/users/gardiner/temp-gen/BuildEventGenerators/ubmc/mygibuu3.root MicroBooNE_CC1MuNp_XSec_2D_PpCosp_nu_MC
 
-.. code-block:: console
 
-	$ ./Scripts/UniverseMaker.sh FPM_CONFIG SEL_CONFIG OUTPUTFILE
+- StandaloneUnfold
 
-``FPM_CONFIG`` includes the output from the last step. 
+    Steven has a `Standalone unfolding tutorial slides <https://microboone-docdb.fnal.gov/cgi-bin/sso/RetrieveFile?docid=42842&filename=Unfolding-Tutorial-uB-Retreat-UMN.pdf&version=8>`_ in ub retreat.
+
+
