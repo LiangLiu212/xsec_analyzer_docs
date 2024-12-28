@@ -1,5 +1,5 @@
 Liang's analysis note
-===========
+=====================
 
 .. _installation:
 
@@ -32,7 +32,7 @@ On a fresh login, just navigate to the same folder and source the ``setup_xsec_a
 
 
 Workflow
-----------
+--------
 
 The `xsec-analyzer <https://github.com/LiangLiu212/xsec_analyzer/tree/docs>`_ provides 
 six major analysis tools. They are executables in ``${XSEC_ANALYZER_DIR}/bin``:
